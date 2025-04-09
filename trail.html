@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Navbar with Carousel</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Top Bar with Search and Login */
+        .top-bar {
+            width: 100%;
+            background-color: #003366; /* Dark blue */
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            width: 70%;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+            outline: none;
+            background-color: #ffffff; /* White */
+            color: #333;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            background-color: #001a33; /* Darker blue */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #003366; /* Dark blue on hover */
+        }
+
+        .login-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ffffff; /* White */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 20px; /* Added padding */
+        }
+
+        .login-icon img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .login-icon:hover {
+            background-color: #f4f4f4; /* Light gray on hover */
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 70px; /* Adjusted to fit below the top bar */
+            left: 0;
+            width: 100%;
+            background-color: #ffffff; /* White */
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            color: #003366; /* Dark blue */
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #003366; /* Dark blue */
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #001a33; /* Darker blue on hover */
+        }
+
+        /* Carousel Container */
+        .carousel-container {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            margin: 200px auto 0; /* Adjusted margin to fit below navbar */
+            overflow: hidden;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+            padding: 20px;
+        }
+
+        .heading {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #003366;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .card {
+            min-width: 400px;
+            margin: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease-in-out;
+            height: 400px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(0, 51, 102, 0.3);
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .card .title {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 51, 102, 0.5);
+        }
+
+        /* Arrow buttons */
+        .arrow-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            transition: background-color 0.3s ease;
+        }
+
+        .arrow-btn:hover {
+            background-color: #001a33;
+        }
+
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
+        /* Content section */
+        .content {
+            margin-top: 200px; /* Adjusted to fit below carousel */
+            padding: 20px;
+            height: 2000px;
+            background-color: #f4f4f4;
+        }
+                .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+              .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            background: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar with Search and Login -->
+    <div class="top-bar">
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search destinations...">
+            <button class="search-button">Search</button>
+        </div>
+        <div class="login-icon">
+            <img src="login.png" alt="Login">
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">PackYourBags</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><div class="dropdown">
+            <button class="dropbtn">Destinations</button>
+            <div class="dropdown-content">
+                <a href="#historic">Historic Heritage</a>
+                <a href="#beaches">Sands & Beaches</a>
+                <a href="#hills">Hill Stations</a>
+                <a href="#spiritual">Spiritual Spots</a>
+                <a href="#adventure">Adventure</a>
+            </div>
+        </div>
+</li>
+            <li><a href="#plan">Plan Your Trip</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </ul>
+    </div>
+<br><br><br><br>
+    <!-- Carousel Containers -->
+    <div class="carousel-container"><br><br><br>
+        <div class="heading">
+            <h1 id="historic">Vedantic Vistas: Glimpses of India’s History</h1>
+        </div>
+        <div class="carousel" id="carousel1">
+            <div class="card">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/TajMahal/taj.jpeg" alt="The Gateway of India">
+                <div class="title">Taj Mahal</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/hampi/hampi/hampi.jpeg" alt="Victoria Memorial">
+                <div class="title">Hampi</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/KonarkSun/konark.jpeg" alt="Mahabodhi Temple">
+                <div class="title">Konark (Sun Temple)</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/GateWay/gate.jpeg" alt="The Gateway of India">
+                <div class="title">Gateway of India</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/ElloraCaves/ellora.jpeg" alt="Anjuna Beach">
+                <div class="title">Ellora Caves</div>
+            </div>
+        </div>
+   <button class="arrow-btn prev-btn" data-carousel="carousel1">&#10094;</button>
+  <button class="arrow-btn next-btn" data-carousel="carousel1">&#10095;</button>
+
+    </div>
+
+    <div class="carousel-container"><br><br><br>
+        <div class="heading">
+            <h1 id="beaches">India's Coastal Kaleidoscope</h1>
+        </div>
+        <div class="carousel" id="carousel2">
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Goa</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/bharathi.jpeg" alt="Victoria Memorial">
+                <div class="title">Puducherry</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/ind.jpeg" alt="Mahabodhi Temple">
+                <div class="title">Gokarna</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Varkala</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/sindhu.jpeg" alt="Anjuna Beach">
+                <div class="title">Marina</div>
+            </div>
+        </div>
+          <button class="arrow-btn prev-btn" data-carousel="carousel1">&#10094;</button>
+  <button class="arrow-btn next-btn" data-carousel="carousel1">&#10095;</button>
+
+    </div>
+
+    <!-- Add more carousels as needed -->
+        <div class="carousel-container"><br><br><br>
+        <div class="heading">
+            <h1 id="hills">Frozen Echoes Of India</h1>
+        </div>
+	       <!-- Carousel -->
+        <div class="carousel">
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Darjeeling</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/bharathi.jpeg" alt="Victoria Memorial">
+                <div class="title">Ooty</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/ind.jpeg" alt="Mahabodhi Temple">
+                <div class="title">Manali</div>
+            </div>
+             <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Coorg</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/sindhu.jpeg" alt="Anjuna Beach">
+                <div class="title">Munnar</div>
+            </div>
+        </div>
+
+        <!-- Arrow Buttons -->
+          <button class="arrow-btn prev-btn" data-carousel="carousel1">&#10094;</button>
+  <button class="arrow-btn next-btn" data-carousel="carousel1">&#10095;</button>
+    </div>
+<div class="carousel-container">
+<br><br><br>
+        <div class="heading">
+            <h1  id="spritual">Temple Tales Of India</h1>
+        </div>
+
+        <!-- Carousel -->
+         <div class="carousel">
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Tirumala</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/bharathi.jpeg" alt="Victoria Memorial">
+                <div class="title">Arunachalam</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/ind.jpeg" alt="Mahabodhi Temple">
+                <div class="title">Varanasi</div>
+            </div>
+             <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Kedarnath</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/sindhu.jpeg" alt="Anjuna Beach">
+                <div class="title">Shiridi</div>
+            </div>
+        </div>
+       
+
+        <!-- Arrow Buttons -->
+     <button class="arrow-btn prev-btn" data-carousel="carousel1">&#10094;</button>
+  <button class="arrow-btn next-btn" data-carousel="carousel1">&#10095;</button>
+
+    </div>
+
+<div class="carousel-container"><br><br><br>
+        <div class="heading">
+            <h1  id="adventure">Thrill Trails Of India</h1>
+        </div>
+
+        <!-- Carousel -->
+        <div class="carousel">
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Gulmarg</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/bharathi.jpeg" alt="Victoria Memorial">
+                <div class="title">Rishikesh</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/ind.jpeg" alt="Mahabodhi Temple">
+                <div class="title">Leh-Ladakh</div>
+            </div>
+             <div class="card">
+                <img src="/home/rkamalani/Downloads/indian.png" alt="The Gateway of India">
+                <div class="title">Dudhsagar Waterfalls</div>
+            </div>
+            <div class="card">
+                <img src="/home/rkamalani/Downloads/sindhu.jpeg" alt="Anjuna Beach">
+                <div class="title">Vellangiri Hills Trek</div>
+            </div>
+        </div>
+
+        <!-- Arrow Buttons -->
+          <button class="arrow-btn prev-btn" data-carousel="carousel1">&#10094;</button>
+  <button class="arrow-btn next-btn" data-carousel="carousel1">&#10095;</button>
+
+    </div>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h2 id="home">Home Section</h2>
+        <p>Scroll down to see the navbar staying fixed at the top!</p>
+
+        <h2 id="destinations">Destinations</h2>
+        <p>Information about different places to visit.</p>
+
+        <h2 id="plan">Plan Your Trip</h2>
+        <p>Guides and tips for planning your trip.</p>
+
+        <h2 id="reviews">Reviews</h2>
+        <p>What travelers say about different locations.</p>
+
+        <h2 id="contact">Contact</h2>
+        <p>Reach out to us for inquiries and support.</p>
+    </div>
+
+    <script>
+     document.addEventListener("DOMContentLoaded", function () {
+    function setupCarousel(carouselId) {
+        const carousel = document.getElementById(carouselId);
+        const cards = carousel.querySelectorAll(".card");
+        const totalCards = cards.length;
+        let index = 1; // Start from the first duplicate
+
+        // Clone the first and last cards
+        const firstClone = cards[0].cloneNode(true);
+        const lastClone = cards[totalCards - 1].cloneNode(true);
+
+        // Add clones to the carousel
+        carousel.appendChild(firstClone);
+        carousel.insertBefore(lastClone, carousel.firstChild);
+
+        // Adjust the starting position
+        const cardWidth = cards[0].offsetWidth + 40; // Adjust for margin
+        carousel.style.transform = `translateX(${-cardWidth}px)`;
+
+        function moveCarousel(direction) {
+            if (direction === 1) {
+                index++;
+            } else {
+                index--;
+            }
+
+            carousel.style.transition = "transform 0.5s ease-in-out";
+            carousel.style.transform = `translateX(${-cardWidth * index}px)`;
+
+            // Handle infinite loop
+            setTimeout(() => {
+                if (index === 0) {
+                    carousel.style.transition = "none";
+                    index = totalCards;
+                    carousel.style.transform = `translateX(${-cardWidth * index}px)`;
+                } else if (index === totalCards + 1) {
+                    carousel.style.transition = "none";
+                    index = 1;
+                    carousel.style.transform = `translateX(${-cardWidth * index}px)`;
+                }
+            }, 500); // Match transition duration
+        }
+
+        // Attach event listeners
+        document.querySelector(`.prev-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => moveCarousel(-1));
+        document.querySelector(`.next-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => moveCarousel(1));
+    }
+
+    // Initialize all carousels
+    setupCarousel("carousel1");
+    setupCarousel("carousel2");
+});
+
+    </script>
+</body>
+</html>

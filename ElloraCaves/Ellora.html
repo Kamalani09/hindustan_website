@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELLORA CAVES – A ROCK-CUT MARVEL</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1, h2, h3, h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+        .me {
+            background-color: black;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            padding: 15px 0;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border-radius: 10px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #007bff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #007bff;
+            text-align: center;
+            animation: popUp 0.5s infinite ease-in-out;
+        }
+
+        @keyframes popUp {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        p {
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .text-section {
+            flex: 3;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .image-section img:hover {
+            transform: scale(1.05);
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 5%;
+        }
+
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: #007bff;
+            border-radius: 50%;
+            padding: 15px;
+            border: 2px solid white;
+            transition: 0.3s;
+        }
+
+        .carousel-control-prev-icon:hover, .carousel-control-next-icon:hover {
+            background-color: #0056b3;
+            border-color: #007bff;
+        }
+
+        #moreContent {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #readMoreBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #readMoreBtn:hover {
+            background: linear-gradient(45deg, #0056b3, #007bff);
+        }
+
+        footer {
+            background-color:green;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .footer-content {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .footer-content h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .footer-content p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .footer-content a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+
+        .icon {
+            color: #007bff;
+            margin-right: 10px;
+        }
+
+        .icon-white {
+            color: white;
+        }
+
+        .footer {
+            background-image: url("Footer.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Carousel -->
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" aria-label="Slide 5"></button>
+        </div>
+        <div id="carouselEllora" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="ellora1.jpg" class="d-block w-100" alt="Ellora Caves Exterior">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Ellora Caves</h5>
+                        <p class="me">⛰️ The Ellora Caves are a stunning UNESCO World Heritage Site, showcasing ancient rock-cut architecture!</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="ellora2.webp" class="d-block w-100" alt="Ellora Caves Monastery">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Ellora Caves</h5>
+                        <p class="me">🛕 Featuring **34 caves** from Buddhist, Hindu, and Jain traditions, Ellora is a masterpiece of religious harmony!</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="ellora3.webp" class="d-block w-100" alt="Ellora Kailasa Temple">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Kailasa Temple</h5>
+                        <p class="me">🪨 The **Kailasa Temple** was carved from a single rock and required removing **200,000 tons** of stone!</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="ellora4.jpg" class="d-block w-100" alt="Ellora Caves Interior">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Ellora Caves</h5>
+                        <p class="me">🎨 The caves feature stunning carvings, sculptures, and murals depicting ancient Indian mythology!</p>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselEllora" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselEllora" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        
+        
+        <!-- Main Content -->
+        <h1>⛰️ ELLORA CAVES – A ROCK-CUT MARVEL</h1>
+        <div class="container">
+            <div class="text-section">
+                <h2>ELLORA CAVES</h2>
+                <p>The <b>Ellora Caves</b>, located in <b>Maharashtra, India</b>, are a breathtaking collection of **34 rock-cut temples** that represent three major religions—<b>Buddhism, Hinduism, and Jainism</b>. Built between the <b>6th and 10th centuries</b>, these caves are a testament to India's rich cultural and architectural heritage. The most iconic structure, the **Kailasa Temple (Cave 16)**, is a monolithic rock-cut temple dedicated to Lord Shiva. It was carved from a single rock and is one of the largest and most magnificent cave temples in the world. The site also features stunning **Buddhist monasteries, intricate carvings, and Jain shrines**, reflecting a harmonious blend of religious traditions. With its **historical significance, artistic grandeur, and unparalleled craftsmanship**, the Ellora Caves continue to captivate historians and visitors alike. ⛰️✨</p>
+                <button id="readMoreBtn">Read More</button>
+                <div id="moreContent">
+                    <iframe width="800" height="360" 
+                    src="https://www.youtube.com/embed/E23s8MmSjuQ?autoplay=1&loop=1&mute=1" 
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                </iframe>
+                
+                    
+                    <h2>📜 History & Legacy</h2>
+                    <p>The Ellora Caves were carved over several centuries, with the earliest caves dating back to the <b>6th century</b>. The Hindu temples were built during the **Rashtrakuta dynasty**, while the Buddhist caves date back to the **Vakataka period**. The site’s Jain temples were later added in the 9th-10th centuries. Recognized as a UNESCO World Heritage Site, Ellora remains an **architectural and spiritual marvel**.</p>
+                    
+                    <h2>🌟 Architectural Brilliance</h2>
+                    <p>The **Kailasa Temple (Cave 16)** is the crown jewel of Ellora, designed to resemble **Mount Kailash**, the mythical abode of Lord Shiva. This massive structure was carved **top-down** from a single rock, removing over **200,000 tons of stone**. The caves also feature **stunning murals, intricate sculptures, and detailed inscriptions** showcasing ancient Indian craftsmanship.</p>
+                    <center><img src="ellora4.jpg" width="800" height="350" alt="Ellora Kailasa Temple"></center>
+                </div>
+            </div>
+            
+            <div class="image-section">
+                <h3>Find Location <i class="fas fa-map-marker-alt icon"></i></h3>
+                <a href="https://maps.app.goo.gl/fPGf3dw1mFReYH7p7"><img class="me" width="350" height="350" src="ellora_map.jpg" alt="Ellora Caves Map"></a>
+                <img src="ellora1.jpg" alt="Ellora Caves Image 1">
+                <img src="ellora2.webp" alt="Ellora Caves Image 2">
+                <img src="ellora3.webp" alt="Ellora Caves Image 3">
+                <img src="ellora4.jpg" alt="Ellora Caves Image 4">
+            </div>
+        </div>
+        
+    <!-- Footer -->
+    <footer class="footer">
+        <center>
+            <table width="80%">
+                <tr align="left">
+                    <td>
+                        <h4 style="color:white">Pack Your Bags</h4>
+                        <br>
+                        Follow Us<br>
+                        <img src="facebook.png">
+                        <a href="https://www.instagram.com/pack.yourbags1/profilecard/?igsh=MTdkNzBvMnNkM29rdA=="> <img src="instagram.png"></a>
+                        <img src="youtube.png">
+                    </td>
+                    <td>
+                        <h4>Quick Links</h4>
+                        <br>
+                        historical
+                        <br>
+                        spiritual
+                        <br>
+                        waterfalls
+                        <br>
+                        Treking
+                        <br>
+                        Beaches
+                        <br>
+                    </td>
+                    <td align="center">
+                        <h4>Scan to Chat</h4>
+                        <img src="Scan.png" width="100" height="100">
+                    </td>
+                </tr>
+            </table>
+        </center>
+        <hr>
+        &copy; 2024 Gulmarg Serenity Escape | <a href="#">Contact Us</a> | <a href="#">Privacy Policy</a>
+        <br>
+        <br>
+        <center>Travel with us</center>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById("readMoreBtn").addEventListener("click", function() {
+            var content = document.getElementById("moreContent");
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+                this.textContent = "Show Less";
+            } else {
+                content.style.display = "none";
+                this.textContent = "Read More";
+            }
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directions from Your Location</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1{
+        text-align:center;
+        background-color:black;
+        color:white;
+        }
+        h2 {
+            margin: 20px 0;
+            color: #007bff;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        #search-container {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 5px;
+        }
+        input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 250px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Pack Your Bags</h1>
+    <h2>Directions from Your Location</h2>
+    <div id="search-container">
+        <input type="text" id="location-input" placeholder="Enter destination..." />
+        <button onclick="searchLocation()">Search</button>
+    </div>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet Routing Machine (for directions) -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <script>
+        let map;
+        let userCoords = null;
+        let destinationCoords = null;
+        let routeControl = null;
+
+        // Manali's coordinates (default destination)
+        const manaliCoords = [32.2432, 77.1892];
+
+        // Famous places near Manali with coordinates
+        const famousPlaces = [
+            { name: "Solang Valley", coords: [32.3168, 77.1587] },
+            { name: "Rohtang Pass", coords: [32.3667, 77.4000] },
+            { name: "Hidimba Devi Temple", coords: [32.2432, 77.1887] },
+            { name: "Manikaran Sahib", coords: [32.0278, 77.3473] },
+            { name: "Jogini Waterfall", coords: [32.2700, 77.1925] },
+            { name: "Old Manali", coords: [32.2500, 77.1800] },
+            { name: "Great Himalayan National Park", coords: [31.7719, 77.4595] },
+            { name: "Vashisht Hot Water Springs", coords: [32.2560, 77.1892] }
+        ];
+
+        function initMap() {
+            map = L.map('map').setView(manaliCoords, 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            famousPlaces.forEach(place => {
+                L.marker(place.coords, { icon: redIcon })
+                    .addTo(map)
+                    .bindPopup(`<b>${place.name}</b>`);
+            });
+
+            getUserLocation();
+        }
+
+        const redIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        userCoords = [position.coords.latitude, position.coords.longitude];
+                        L.marker(userCoords).addTo(map)
+                            .bindPopup("<b>You are here!</b>").openPopup();
+                        map.setView(userCoords, 13);
+                        destinationCoords = manaliCoords;
+                        L.marker(destinationCoords).addTo(map)
+                            .bindPopup("<b>Manali</b>").openPopup();
+                        drawRoute();
+                    },
+                    function(error) {
+                        alert("Geolocation access denied. Unable to find your location.");
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function searchLocation() {
+            const location = document.getElementById("location-input").value;
+            if (location) {
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            destinationCoords = [data[0].lat, data[0].lon];
+                            L.marker(destinationCoords).addTo(map)
+                                .bindPopup("<b>Destination</b>").openPopup();
+                            map.setView(destinationCoords, 13);
+                            drawRoute();
+                        } else {
+                            alert("Location not found! Try another place.");
+                        }
+                    })
+                    .catch(error => {
+                        alert("Failed to fetch location. Try again later.");
+                    });
+            } else {
+                alert("Please enter a destination.");
+            }
+        }
+
+        function drawRoute() {
+            if (!userCoords || !destinationCoords) return;
+            if (routeControl) map.removeControl(routeControl);
+            routeControl = L.Routing.control({
+                waypoints: [L.latLng(userCoords), L.latLng(destinationCoords)],
+                routeWhileDragging: true,
+            }).addTo(map);
+        }
+
+        initMap();
+    </script>
+</body>
+</html>

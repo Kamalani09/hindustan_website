@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PackYourBags - Your Journey Starts Here</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --warning: #f0ad4e;
+            --danger: #d9534f;
+            --text: #333;
+            --bg-gradient: linear-gradient(135deg, #4361ee 0%, #3f37c9 100%);
+            --map-bg: #e8f4f8;
+            --pin-color: #e74c3c;
+            --suitcase-color: #f39c12;
+            --stamp-color: #e74c3c;
+            --flight-color: #3498db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Enhanced Creative Left Side - India Map with Interactive Pins */
+        .map-side {
+            width: 40%;
+            background: var(--map-bg);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            background-image: url('/home/rkamalani/Desktop/pack-your-bags/inddddd.jpeg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(232, 244, 248, 0.7);
+            z-index: 1;
+        }
+
+        .map-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+    .map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: none; /* Ensure no border is present */
+}
+
+        .map-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .map-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .map-logo {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        /* Animated Destination Pins */
+        .destination-pins {
+            position: absolute;
+            width: 100%;
+            height: calc(100% - 100px);
+            top: 100px;
+            left: 0;
+        }
+
+        .pin {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: var(--pin-color);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            animation: bounce 1.5s infinite;
+            z-index: 2;
+        }
+
+        .pin::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 6px;
+            left: 6px;
+        }
+
+        .pin:hover {
+            animation: pulse 1s infinite;
+        }
+
+        /* Updated Pin Positions for India Map */
+        .pin.delhi { top: 13%; left: 33%; }
+        .pin.mumbai { top: 35%; left: 35%; }
+        .pin.bangalore { top: 70%; left: 35%; }
+        .pin.goa { top: 55%; left: 22%; }
+        .pin.jaipur { top: 25%; left: 45%; }
+        .pin.shimla { top: 5%; left: 30%; }
+        .pin.chennai { top: 60%; left: 35%; }
+        .pin.kolkata { top: 40%; left: 55%; }
+      
+
+       .pin-label {
+            position: absolute;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 3;
+        }
+
+        .pin:hover .pin-label {
+            opacity: 1;
+        }
+
+        .pin.delhi .pin-label { top: -35px; left: -10px; }
+        .pin.mumbai .pin-label { top: -35px; left: -15px; }
+        .pin.bangalore .pin-label { top: -35px; left: -25px; }
+        .pin.goa .pin-label { top: -35px; left: -5px; }
+        .pin.jaipur .pin-label { top: -35px; left: -15px; }
+        .pin.shimla .pin-label { top: -35px; left: -15px; }
+        .pin.chennai .pin-label { top: -35px; left: -20px; }
+        .pin.kolkata .pin-label { top: -35px; left: -20px; }
+       
+
+        /* Flight Animation */
+        .flight-path {
+            position: absolute;
+            width: 100%;
+            height: calc(100% - 100px);
+            top: 100px;
+            left: 0;
+            z-index: 1;
+        }
+
+.flight {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border-radius: 50%;
+    transform: rotate(0deg);
+    z-index: 3;
+    animation: fly 15s linear infinite;
+    opacity: 1; /* Changed from 0 to 1 to always be visible */
+    animation: fly 15s linear infinite;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+        
+        /* Flight Tracking Info */
+        .flight-info {
+            position: absolute;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 300px;
+            z-index: 4;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .flight-info.show {
+            opacity: 1;
+        }
+
+        .flight-info-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .flight-info-content {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .flight-info-item {
+            text-align: center;
+        }
+
+        .flight-info-item i {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--flight-color);
+        }
+
+	.pin.active ~{
+		opacity:0.8;
+		animation:stampIn 0.5s forwards;
+		}
+       
+       
+        /* Cloud Animation */
+        .clouds {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: cloudMove linear infinite;
+        }
+
+        .cloud:nth-child(1) {
+            width: 80px;
+            height: 30px;
+            top: 20%;
+            left: -100px;
+            animation-duration: 30s;
+        }
+
+        .cloud:nth-child(2) {
+            width: 120px;
+            height: 40px;
+            top: 35%;
+            left: -150px;
+            animation-duration: 40s;
+            animation-delay: 5s;
+        }
+
+        .cloud:nth-child(3) {
+            width: 60px;
+            height: 25px;
+            top: 50%;
+            left: -80px;
+            animation-duration: 25s;
+            animation-delay: 10s;
+        }
+
+        .cloud:nth-child(4) {
+            width: 100px;
+            height: 35px;
+            top: 65%;
+            left: -120px;
+            animation-duration: 35s;
+            animation-delay: 15s;
+        }
+
+        /* Login/Signup Form Side */
+        .login-side {
+            width: 60%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            transition: all 0.5s ease;
+        }
+
+        .login-form, .signup-form {
+            width: 100%;
+        }
+
+        .signup-form {
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            right: 60px;
+            bottom:200px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(100%);
+        }
+
+        .login-side.show-signup .login-form {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-100%);
+        }
+
+        .login-side.show-signup .signup-form {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(0);
+        }
+
+        .login-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 7px;
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .form-input {
+            width: 80%;
+            padding: 10px 10px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            background-color: white;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .form-button {
+            width: 80%;
+            padding: 15px;
+            background: var(--bg-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .secondary-button {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .secondary-button:hover {
+            background: #f5f7ff;
+        }
+
+        .social-login {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .social-text {
+            position: relative;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .social-text::before,
+        .social-text::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .social-text::before {
+            left: 0;
+        }
+
+        .social-text::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icon.google { color: #DB4437; }
+        .social-icon.facebook { color: #4267B2; }
+        .social-icon.twitter { color: #1DA1F2; }
+
+        .toggle-form {
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .toggle-form a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+
+   	
+        
+
+      
+      
+
+@keyframes fly {
+    0% { 
+        top: 5%; 
+        left: 30%; 
+        opacity: 1;
+        transform: scale(1);
+    }
+    20% { top: 13%; left: 33%; }
+    30% { top: 25%; left: 45%; }
+    40% { top: 35%; left: 35%; }
+    50% { top: 40%; left: 55%; }
+    60% { top: 55%; left: 20%; }
+    70% { top: 65%; left: 35%; }
+    80% { top: 70%; left: 45%; }
+    90% { top: 80%; left: 15%; }
+    100% { 
+        top: 5%; 
+        left: 30%; 
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes stampIn {
+            0% { transform: translate(-50%, -50%) rotate(-15deg) scale(0.5); opacity: 0; }
+            80% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.1); }
+            100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1); opacity: 0.8; }
+        }
+        @keyframes cloudMove {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100% + 200px)); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(-45deg); }
+            40% { transform: translateY(-10px) rotate(-45deg); }
+            60% { transform: translateY(-5px) rotate(-45deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(-45deg) scale(1); }
+            50% { transform: rotate(-45deg) scale(1.1); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .login-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .map-side, .login-side {
+                width: 100%;
+            }
+
+            .map-side {
+                padding: 30px;
+                height: 300px;
+            }
+
+            .login-side {
+                padding: 40px 20px;
+            }
+
+            .destination-pins, .flight-path {
+                height: calc(100% - 80px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .login-container {
+                width: 95%;
+            }
+
+            .login-title {
+                font-size: 24px;
+            }
+
+            .map-title {
+                font-size: 18px;
+            }
+
+            .pin {
+                width: 18px;
+                height: 18px;
+            }
+
+            .pin-label {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+            
+            
+            .login-side {
+                padding: 30px 15px;
+            }
+            
+            .signup-form {
+                top: 30px;
+                left: 15px;
+                right: 15px;
+            }
+            
+            .form-input {
+                width: 100%;
+            }
+            
+            .form-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Enhanced Creative Left Side - Interactive India Map -->
+        <div class="map-side">
+            <div class="map-overlay"></div>
+           
+            <div class="clouds">
+                <div class="cloud"></div>
+                <div class="cloud"></div>
+                <div class="cloud"></div>
+                <div class="cloud"></div>
+            </div>
+            <div class="map-content">
+                <div class="map-header">
+                    <div class="map-title"></div>
+                    <div class="map-logo">
+
+                    </div>
+                </div>
+                <div class="flight-path">
+    <div class="flight"><img src="/home/rkamalani/Desktop/pack-your-bags/plane.png" width=50 height=50></div> <!-- Emoji added directly here -->
+</div>
+                
+               
+                
+                <div class="flight-info">
+                    <div class="flight-info-header">
+                        <span>Flight PKB-2024</span>
+                        <span><i class="fas fa-plane"></i></span>
+                    </div>
+                    <div class="flight-info-content">
+                        <div class="flight-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span class="flight-from">Delhi</span>
+                        </div>
+                        <div class="flight-info-item">
+                            <i class="fas fa-route"></i>
+                            <span class="flight-route">In Transit</span>
+                        </div>
+                        <div class="flight-info-item">
+                            <i class="fas fa-flag-checkered"></i>
+                            <span class="flight-to">Mumbai</span>
+                        </div>
+                        
+                    </div>
+                    
+                    
+                </div>
+               
+                <div class="destination-pins">
+                    <div class="pin delhi active">
+                        <div class="pin-label">Delhi</div>
+                    </div>
+                    <div class="pin mumbai">
+                        <div class="pin-label">Mumbai</div>
+                    </div>
+                    <div class="pin bangalore">
+                        <div class="pin-label">Bangalore</div>
+                    </div>
+                    <div class="pin goa">
+                        <div class="pin-label">Goa</div>
+                    </div>
+                    <div class="pin jaipur">
+                        <div class="pin-label">Jaipur</div>
+                    </div>
+                    <div class="pin shimla">
+                        <div class="pin-label">Shimla</div>
+                    </div>
+                    <div class="pin chennai">
+                        <div class="pin-label">Chennai</div>
+                    </div>
+                    <div class="pin kolkata">
+                        <div class="pin-label">Kolkata</div>
+                    </div>
+                    
+                </div>
+               
+                
+               
+            </div>
+        </div>
+        
+        <!-- Login/Signup Form Side -->
+        <div class="login-side" id="formSide">
+            <div class="form-container">
+                <!-- Login Form -->
+                <form class="login-form">
+                    <div class="login-header">
+                        <h1 class="login-title">Welcome Back</h1>
+                        <p class="login-subtitle">Continue your journey with PackYourBags</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="form-button">
+                   <a href="/home/rkamalani/Desktop/pack-your-bags/mg.html" style="color:white; text-decoration:none;"> <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Login</a>
+                    </button>
+
+                    <div class="social-login">
+                        <div class="social-text">Or sign in with</div>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon google">
+                                <i class="fab fa-google"></i>
+                            </a>
+                            <a href="#" class="social-icon facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-icon twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="toggle-form">
+                        New to PackYourBags? <a href="#" id="showSignup">Create an account</a>
+                    </div>
+                </form>
+                
+                <!-- Signup Form -->
+                <form class="signup-form">
+                    <div class="login-header">
+                        <h1 class="login-title">PackYourBags</h1>
+                        <p class="login-subtitle">Join Us and Start your Adventure</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-name" class="form-label">Full Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="signup-name" class="form-input" placeholder="Your Name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email" class="form-label">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="signup-email" class="form-input" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-password" class="form-label">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="signup-password" class="form-input" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-confirm" class="form-label">Confirm Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="signup-confirm" class="form-input" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="form-button">
+                       <i class="fas fa-user-plus" style="margin-right: 8px;"></i> Sign Up                   
+                    </button>
+
+                   
+                    
+                    <div class="toggle-form">
+                        Already have an account? <a href="#" id="showLogin">Sign in</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Interactive Destination Pins
+        const pins = document.querySelectorAll('.pin');
+        const passportStamp = document.querySelector('.passport-stamp');
+        const flightInfo = document.querySelector('.flight-info');
+        const flightFrom = document.querySelector('.flight-from');
+        const flightTo = document.querySelector('.flight-to');
+        const flightRoute = document.querySelector('.flight-route');
+        
+        // Flight route data
+        const flightRoutes = [
+            { from: "Delhi", to: "Mumbai", route: "DEL → BOM" },
+            { from: "Mumbai", to: "Goa", route: "BOM → GOI" },
+            { from: "Goa", to: "Bangalore", route: "GOI → BLR" },
+            { from: "Bangalore", to: "Chennai", route: "BLR → MAA" },
+            { from: "Chennai", to: "Kolkata", route: "MAA → CCU" },
+            { from: "Kolkata", to: "Shimla", route: "CCU → SLV" },
+            { from: "Shimla", to: "Jaipur", route: "SLV → JAI" },
+            { from: "Jaipur", to: "Kochi", route: "JAI → COK" },
+            { from: "Kochi", to: "Delhi", route: "COK → DEL" }
+        ];
+        
+        let currentRouteIndex = 0;
+        
+        function updateFlightInfo() {
+            const route = flightRoutes[currentRouteIndex];
+            flightFrom.textContent = route.from;
+            flightTo.textContent = route.to;
+            flightRoute.textContent = route.route;
+            
+            // Show flight info briefly
+            flightInfo.classList.add('show');
+            setTimeout(() => {
+                flightInfo.classList.remove('show');
+            }, 3000);
+            
+            currentRouteIndex = (currentRouteIndex + 1) % flightRoutes.length;
+        }
+        
+        // Initialize flight animation
+        setTimeout(() => {
+            updateFlightInfo();
+            setInterval(updateFlightInfo, 15000); // Update every 15 seconds (matches flight animation)
+        }, 5000);
+        
+        pins.forEach(pin => {
+            pin.addEventListener('click', function() {
+                // Remove active class from all pins
+                pins.forEach(p => p.classList.remove('active'));
+                // Add active class to clicked pin
+                this.classList.add('active');
+                
+                // Get destination name from pin label
+                const destination = this.querySelector('.pin-label').textContent;
+                passportStamp.innerHTML = `<i class="fas fa-passport"></i><span style="display:none">${destination}</span>`;
+                
+                // Trigger stamp animation
+                
+            });
+        });
+        
+        // Form submission handling
+       // Modify the login form submission handler to:
+document.querySelector('.login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+    submitBtn.disabled = true;
+    
+    // Simulate API call
+    setTimeout(() => {
+        // Store user data in localStorage
+        const user = {
+            email: email,
+            loggedIn: true,
+            timestamp: new Date().getTime()
+        };
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        
+        // Redirect to main page with trip planner
+        window.location.href = "website.html?show=planner"; // Change to your main page filename
+    }, 1500);
+});
+        
+        // Signup form submission
+        document.querySelector('.signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating your account...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert('Account created successfully! Welcome to PackYourBags.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+        
+        // Toggle between login and signup forms
+        document.getElementById('showSignup').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.login-side').classList.add('show-signup');
+        });
+        
+        document.getElementById('showLogin').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.login-side').classList.remove('show-signup');
+        });
+        
+        // Auto-rotate through destinations
+        let currentPinIndex = 0;
+        function rotateDestinations() {
+            pins.forEach(pin => pin.classList.remove('active'));
+            currentPinIndex = (currentPinIndex + 1) % pins.length;
+            pins[currentPinIndex].classList.add('active');
+            
+            // Trigger click event to show stamp
+            const event = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+            pins[currentPinIndex].dispatchEvent(event);
+        }
+        
+        // Rotate every 5 seconds
+        setInterval(rotateDestinations, 5000);
+    </script>
+</body>
+</html>

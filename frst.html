@@ -1,0 +1,2235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PackYourBags - Travel & Trip Planning</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* General Styles */
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4bb543;
+            --warning-color: #f0ad4e;
+            --danger-color: #d9534f;
+            --background-color: lightsteelblue;
+            --top-bar-bg: #003366;
+            --search-button-bg: #001a33;
+            --card-shadow: 0 4px 15px rgba(0, 51, 102, 0.3);
+            --card-hover-shadow: 0 8px 20px rgba(0, 51, 102, 0.5);
+            --form-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+           /*background-color: var(--background-color);*/
+           background-image:url('/home/rkamalani/Desktop/pack-your-bags/WhatsApp Image 2025-04-04 at 10.39.45 PM.jpeg');
+        }
+
+        /* Utility Classes */
+        .flex {
+            display: flex;
+        }
+        
+        .flex-between {
+            justify-content: space-between;
+        }
+        
+        .flex-center {
+            align-items: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .full-width {
+            width: 100%;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .relative {
+            position: relative;
+        }
+        
+        .absolute-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Top Bar with Search and Login */
+        .top-bar {
+            width: 100%;
+            background-color: var(--top-bar-bg);
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            width: 80%;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+            outline: none;
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            background-color: var(--search-button-bg);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: var(--top-bar-bg);
+        }
+
+        .login-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 20px;
+        }
+
+        .login-icon img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .login-icon:hover {
+            background-color: #f4f4f4;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo {
+            color: var(--top-bar-bg);
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .nav-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--top-bar-bg);
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #001a33;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-btn {
+            background: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            color: var(--top-bar-bg);
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        .dropdown-link {
+            color: black;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .dropdown-link:hover {
+            background-color: #ddd;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Video Background */
+        .video-bg {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 100px;
+        }
+
+        /* Carousel Container */
+        .carousel-container {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            margin: 80px auto 0;
+            overflow: hidden;
+            text-align: center;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+            padding: 20px;
+        }
+
+        .section-heading {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--top-bar-bg);
+            background-color: white;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .card {
+            min-width: 400px;
+            margin: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease-in-out;
+            height: 400px;
+            flex-shrink: 0;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card-img {
+            width: 400px;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .card-title {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        /* Arrow buttons */
+        .arrow-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--top-bar-bg);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            transition: background-color 0.3s ease;
+        }
+
+        .arrow-btn:hover {
+            background-color: #001a33;
+        }
+
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
+        /* Trip Planner Form Styles */
+        .form-section {
+            padding: 100px 20px 50px;
+            background-color: var(--light-color);
+        }
+        
+        .form-wrapper {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--form-shadow);
+        }
+        
+        .form-image {
+            width: 50%;
+        }
+        
+        .form-container {
+            flex: 1;
+            padding: 2rem;
+        }
+        
+        .form-content {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .form-title {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .form-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-group-full {
+            grid-column: span 2;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            background-color: white;
+        }
+        
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-input, .checkbox-input {
+            margin-right: 8px;
+            accent-color: var(--primary-color);
+        }
+        
+        .budget-range {
+            width: 100%;
+            margin: 1rem 0;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: #ddd;
+            outline: none;
+        }
+        
+        .budget-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .budget-value {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .cost-summary {
+            background-color: #f0f5ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            display: none;
+        }
+        
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cost-total {
+            font-weight: 600;
+            color: var(--primary-color);
+            border-top: 1px solid #ddd;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .form-button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: 1rem;
+        }
+        
+        .form-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .form-button:active {
+            transform: translateY(0);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #777;
+            font-size: 0.8rem;
+        }
+        
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+        
+        .form-input:invalid, .form-select:invalid, .form-textarea:invalid {
+            border-color: var(--danger-color);
+        }
+        
+        .form-input:invalid + .error-message, 
+        .form-select:invalid + .error-message, 
+        .form-textarea:invalid + .error-message {
+            display: block;
+        }
+        
+        /* Map Container */
+        .map-container {
+            height: 300px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .map-instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .location-button {
+            margin-top: 5px;
+            padding: 10px;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @media (min-width: 768px) {
+            .form-image {
+                display: block;
+            }
+            
+            .form-content {
+                padding: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group-full {
+                grid-column: span 1;
+            }
+            
+            .form-content {
+                padding: 1.5rem;
+            }
+            
+            .form-wrapper {
+                flex-direction: column;
+            }
+            
+            .form-image {
+                width: 100%;
+                height: 300px;
+                object-fit: cover;
+            }
+        }
+                #demoPaymentButton {
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #demoPaymentButton:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .payment-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .close-payment {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.3s ease;
+        }
+        
+        .close-payment:hover {
+            color: var(--primary-color);
+        }
+        
+        .payment-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-header h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .payment-header p {
+            color: #666;
+        }
+        
+        .payment-methods {
+            margin: 1.5rem 0;
+        }
+        
+        .payment-method {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--primary-color);
+            background-color: #f0f5ff;
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background-color: #f0f5ff;
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+        
+        .payment-method i {
+            font-size: 1.8rem;
+            margin-right: 1rem;
+            color: var(--primary-color);
+            width: 40px;
+            text-align: center;
+        }
+        
+        .payment-method div h5 {
+            margin-bottom: 0.25rem;
+            color: var(--dark-gray);
+        }
+        
+        .payment-method div p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .payment-details {
+            margin-top: 1.5rem;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .payment-details.active {
+            display: block;
+        }
+        
+        .payment-details h4 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .payment-details input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .payment-details input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .input-group > div {
+            flex: 1;
+        }
+        
+        .qr-code-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .qr-code-container img {
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        
+        .payment-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        
+        .payment-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #cancelPayment {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        #cancelPayment:hover {
+            background-color: #e0e0e0;
+        }
+        
+        #confirmPayment {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        #confirmPayment:hover {
+            background-color: #3fa037;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar with Search and Login -->
+    <div class="top-bar">
+        <div class="search-container flex flex-center">
+            <input type="text" class="search-bar" placeholder="Search destinations...">
+            <button class="search-button">Search</button>
+        </div>
+        <div class="login-icon">
+            <img src="login.png" alt="Login">
+        </div>
+    </div>    
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">PackYourBags</div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <button class="dropdown-btn">Destinations</button>
+                    <div class="dropdown-content">
+                        <a href="#historic" class="dropdown-link">Historic Heritage</a>
+                        <a href="#beaches" class="dropdown-link">Sands & Beaches</a>
+                        <a href="#hills" class="dropdown-link">Hill Stations</a>
+                        <a href="#spiritual" class="dropdown-link">Spiritual Spots</a>
+                        <a href="#adventure" class="dropdown-link">Adventure</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="#plan" class="nav-link">Plan Your Trip</a></li>
+            <li class="nav-item"><a href="#reviews" class="nav-link">Reviews</a></li>
+            <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- Video Background -->
+    <video class="video-bg" autoplay loop muted playsinline  id="home">
+        <source src="/home/rkamalani/Desktop/pack-your-bags/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Carousel Containers -->
+    <div class="carousel-container">
+        <div class="section-heading">
+            <h1 id="historic">Vedantic Vistas: Glimpses of India's History</h1>
+        </div>
+        <div class="carousel" id="carousel1">
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/TajMahal/Taj.html"> <img class="card-img" src="/home/rkamalani/Downloads/tajmahal.jpeg" alt="The Gateway of India"></a>
+                <div class="card-title">Taj Mahal</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/hampi/hampi/hampi.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/hampi/hampi/hampi.jpeg" alt="Victoria Memorial"></a>
+                <div class="card-title">Hampi</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/KonarkSun/KonarkSun.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/KonarkSun/1640860172_Sun_temple_drishti_ias_english.webp" alt="Mahabodhi Temple"></a>
+                <div class="card-title">Konark (Sun Temple)</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/GateWay/GateIndia.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/GateWay/gate.jpeg" alt="The Gateway of India"></a>
+                <div class="card-title">Gateway of India</div>
+            </div>
+            <div class="card">
+             <a href="/home/rkamalani/Desktop/pack-your-bags/ElloraCaves/Ellora.html">   <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/ElloraCaves/ellora.jpeg" alt="Anjuna Beach"></a>
+                <div class="card-title">Ellora Caves</div>
+            </div>
+        </div>
+        <button class="arrow-btn prev-btn" data-carousel="carousel1">&#10094;</button>
+        <button class="arrow-btn next-btn" data-carousel="carousel1">&#10095;</button>
+    </div>
+
+    <div class="carousel-container">
+        <div class="section-heading">
+            <h1 id="beaches">India's Coastal Kaleidoscope</h1>
+        </div>
+        <div class="carousel" id="carousel2">
+            <div class="card">
+              <a href="/home/rkamalani/Desktop/pack-your-bags/goa.html">  <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/ashutosh-saraswat-CXyz3qljaH8-unsplash.jpg" alt="goa"></a>
+                <div class="card-title">Goa</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/pondi.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/Sunrise @ Pondicherry Beach.jpeg" alt="pondi"></a>
+                <div class="card-title">Puducharry</div>
+            </div>
+            <div class="card">
+              <a href="/home/rkamalani/Desktop/pack-your-bags/gokarna.html">  <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/gok3.jpeg" alt="gokarna"></a>
+                <div class="card-title">Gokarna</div>
+            </div>
+            <div class="card">
+             <a href="/home/rkamalani/Desktop/pack-your-bags/varkala.html">   <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/var2.jpeg" alt="varkala"></a>
+                <div class="card-title">Varkala</div>
+            </div>
+            <div class="card">
+              <a href="/home/rkamalani/Desktop/pack-your-bags/marina.html">  <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/mar5.jpeg" alt="marina Beach"></a>
+                <div class="card-title">Marina</div>
+            </div>
+        </div>
+        <button class="arrow-btn prev-btn" data-carousel="carousel2">&#10094;</button>
+        <button class="arrow-btn next-btn" data-carousel="carousel2">&#10095;</button>
+    </div>
+
+    <!-- Hill Stations Carousel -->
+    <div class="carousel-container">
+        <div class="section-heading">
+            <h1 id="hills">Frozen Echoes Of India</h1>
+        </div>
+        <div class="carousel" id="carousel3">
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/Darjeeling/Darjeling.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/Darjeeling/photo-1622308644420-b20142dc993c.jpeg" alt="darjeeling"></a>
+                <div class="card-title">Darjeeling</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/ooty/ooty.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/ooty/Botanical_Garden_ooty.jpg" alt="ooty"></a>
+                <div class="card-title">Ooty</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/manali/Manali.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/manali/hidimba-temple-manali-himachal-pradesh-1-attr-hero.jpeg" alt="manali"></a>
+                <div class="card-title">Manali</div>
+            </div>
+             <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/coorg/coorg.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/coorg/coorg_raja.jpeg" alt="coorg"></a>
+                <div class="card-title">Coorg</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/Munnar/Munnar.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/Hill Stations/Munnar/1-eravikulam-national-park-attr-hero.jpeg" alt="munnar"></a>
+                <div class="card-title">Munnar</div>
+            </div>
+        </div>
+        <button class="arrow-btn prev-btn" data-carousel="carousel3">&#10094;</button>
+        <button class="arrow-btn next-btn" data-carousel="carousel3">&#10095;</button>
+    </div>
+
+    <!-- Spiritual Spots Carousel -->
+    <div class="carousel-container">
+        <div class="section-heading">
+            <h1 id="spiritual">Temple Tales Of India</h1>
+        </div>
+        <div class="carousel" id="carousel4">
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/pack your bags/tirupati.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/pack your bags/balaji tpt.jpg" alt="tirumala"></a>
+                <div class="card-title">Tirumala</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/pack your bags/arunachalam.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/pack your bags/arunachalam fest.jpg" alt="arunachalam"></a>
+                <div class="card-title">Arunachalam</div>
+            </div>
+            <div class="card">
+                <a href="/home/rkamalani/Desktop/pack-your-bags/pack your bags/varanasi.html"><img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/pack your bags/download (6).jpeg" alt="varanasi"></a>
+                <div class="card-title">Varanasi</div>
+            </div>
+             <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/pack your bags/kedarnath.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/pack your bags/Kedarnath.jpeg" alt="kedarnath"></a>
+                <div class="card-title">Kedarnath</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/pack your bags/shiridi sai babab.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/pack your bags/SAImyworld.jpeg" alt="shiridi"></a>
+                <div class="card-title">Shiridi</div>
+            </div>
+        </div>
+        <button class="arrow-btn prev-btn" data-carousel="carousel4">&#10094;</button>
+        <button class="arrow-btn next-btn" data-carousel="carousel4">&#10095;</button>
+    </div>
+
+    <!-- Adventure Carousel -->
+    <div class="carousel-container">
+        <div class="section-heading">
+            <h1 id="adventure">Thrill Trails Of India</h1>
+        </div>
+        <div class="carousel" id="carousel5">
+            <div class="card">
+              <a href="/home/rkamalani/Desktop/pack-your-bags/yamuna/Gulmarg.html">  <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/yamuna/gulmarg-meadows-srinagar-tri-iter-day1.jpg" alt="The Gateway of India"></a>
+                <div class="card-title">Gulmarg</div>
+            </div>
+            <div class="card">
+              <a href="/home/rkamalani/Desktop/pack-your-bags/yamuna/Rishikesh.html">  <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/yamuna/rishikesh2.jpeg" alt="Victoria Memorial"></a>
+                <div class="card-title">Rishikesh</div>
+            </div>
+            <div class="card">
+              <a href="/home/rkamalani/Desktop/pack-your-bags/yamuna/leh-ladakh.html">  <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/yamuna/leh-ladakh-1.jpg" alt="Mahabodhi Temple"></a>
+                <div class="card-title">Leh-Ladakh</div>
+            </div>
+             <div class="card">
+              <a href="/home/rkamalani/Desktop/pack-your-bags/yamuna/Dudhsagar.html">  <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/yamuna/dudhsagar3.jpg" alt="The Gateway of India"></a>
+                <div class="card-title">Dudhsagar Waterfalls</div>
+            </div>
+            <div class="card">
+               <a href="/home/rkamalani/Desktop/pack-your-bags/yamuna/velliangiri.html"> <img class="card-img" src="/home/rkamalani/Desktop/pack-your-bags/yamuna/velliangiri-4.jpg" alt="Anjuna Beach"></a>
+                <div class="card-title">Vellangiri Hills Trek</div>
+            </div>
+        </div>
+        <button class="arrow-btn prev-btn" data-carousel="carousel5">&#10094;</button>
+        <button class="arrow-btn next-btn" data-carousel="carousel5">&#10095;</button>
+    </div>
+
+    <!-- Trip Planner Form Section -->
+    <section class="form-section" id="plan">
+        <div class="form-wrapper">
+            <div class="form-image">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/ammaaa.jpeg" class="full-width" height="1550">
+            </div>
+            <div class="form-container">
+                <div class="form-content animated">
+                    <div class="form-header">
+                        <i class="fas fa-plane-departure form-icon"></i>
+                        <h2 class="form-title">Plan My Trip</h2>
+                        <p class="form-subtitle">Fill in your travel details and we'll help you plan the perfect trip</p>
+                    </div>
+                    <form id="touristForm" novalidate>
+                        <!-- Personal Information -->
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Full Name</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input type="text" id="name" name="name" class="form-input" placeholder="John Doe" required>
+                                </div>
+                                <div class="error-message">Please enter your full name</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" id="email" name="email" class="form-input" placeholder="john@example.com" required>
+                                </div>
+                                <div class="error-message">Please enter a valid email address</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="mobile" class="form-label">Mobile Number</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-phone input-icon"></i>
+                                    <input type="tel" id="mobile" name="mobile" class="form-input" placeholder="+91 9876543210" required>
+                                </div>
+                                <div class="error-message">Please enter a valid mobile number</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="members" class="form-label">Number of Travelers</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-users input-icon"></i>
+                                    <input type="number" id="members" name="members" class="form-input" min="1" max="20" placeholder="2" required>
+                                </div>
+                                <div class="error-message">Please enter a number between 1-20</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Travel Information -->
+                        <div class="form-group form-group-full">
+                            <label for="currentLocation" class="form-label">Current Location</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-map-marker-alt input-icon"></i>
+                                <input type="text" id="currentLocation" name="currentLocation" class="form-input" placeholder="New Delhi, India" required>
+                            </div>
+                            <div class="error-message">Please enter your current location</div>
+                            <button type="button" id="detectLocationBtn" class="form-button location-button">
+                                <i class="fas fa-location-arrow"></i> Detect My Location
+                            </button>
+                        </div>
+                        
+                        <div class="form-group form-group-full">
+                            <label for="destination" class="form-label">Destination</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-map-marked-alt input-icon"></i>
+                                <input type="text" id="destination" name="destination" class="form-input" placeholder="Goa, India" required>
+                            </div>
+                            <div class="error-message">Please enter your destination</div>
+                        </div>
+                        
+                        <!-- Map Container -->
+                        <div id="mapContainer" class="map-container">
+                            <div class="map-instructions">Search for locations above to see them on the map</div>
+                            <div id="map" class="map"></div>
+                        </div>
+                         
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="departureDate">Departure Date</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-calendar-day input-icon"></i>
+                                    <input type="date" class="form-input" id="departureDate" name="departureDate" required>
+                                </div>
+                                <div class="error-message">Please select a departure date</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="returnDate">Return Date</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-calendar-day input-icon"></i>
+                            <input type="date" class="form-input" id="returnDate" name="returnDate" required>
+                        </div>
+                        <div class="error-message">Please select a return date</div>
+                    </div>
+                </div>
+                
+                <!-- Travel Preferences -->
+                <div class="form-group full-width">
+                    <label>Transportation Mode</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="bus" name="transportationMode" value="Bus" class="form-input" checked>
+                            <label for="bus"><i class="fas fa-bus"></i> Bus</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="car" name="transportationMode" value="Car"  class="form-input">
+                            <label for="car"><i class="fas fa-car"></i> Car</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="train" name="transportationMode" value="Train"  class="form-input">
+                            <label for="train"><i class="fas fa-train"></i> Train</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="flight" name="transportationMode" value="Flight"  class="form-input">
+                            <label for="flight"><i class="fas fa-plane"></i> Flight</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>Accommodation Type</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="hotel" name="accommodation" value="Hotel"  class="form-input" checked>
+                            <label for="hotel"><i class="fas fa-hotel"></i> Hotel</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="resort" name="accommodation"  class="form-input" value="Resort">
+                            <label for="resort"><i class="fas fa-umbrella-beach"></i> Resort</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="hostel" name="accommodation"  class="form-input" value="Hostel">
+                            <label for="hostel"><i class="fas fa-bed"></i> Hostel</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="homestay" name="accommodation"  class="form-input" value="Homestay">
+                            <label for="homestay"><i class="fas fa-home"></i> Homestay</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Guide Options -->
+                <div class="form-group full-width">
+                    <label>Do you require a guide?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="with-guide" name="guide" value="with-guide" class="form-input" required>
+                            <label for="with-guide">Yes, I want a guide</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="without-guide" name="guide" value="without-guide"  class="form-input" checked>
+                            <label for="without-guide">No, I don't need a guide</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group full-width" id="guideFeeGroup">
+                    <label for="guideFee">Guide Fee (₹)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-money-bill-wave input-icon"></i>
+                        <input type="number" id="guideFee" name="guideFee" value="2000" min="1000" max="10000"  class="form-input">
+                    </div>
+                </div>
+                
+                <!-- Budget Range -->
+                <div class="form-group full-width">
+                    <label for="budget">Budget Range (₹)</label>
+                    <input type="range" id="budget" name="budget" min="2000" max="100000" step="1000" value="25000" class="budget-range">
+                    <div class="budget-value">₹<span id="budgetValue">25,000</span></div>
+                </div>
+                
+                <!-- Activities -->
+                <div class="form-group full-width">
+                    <label>Activities You're Interested In</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="sightseeing" name="activities"  class="form-input" value="sightseeing">
+                            <label for="sightseeing"><i class="fas fa-binoculars"></i> Sightseeing</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="adventure" name="activities" class="form-input" value="adventure">
+                            <label for="adventure"><i class="fas fa-hiking"></i> Adventure</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="shopping"  class="form-input" name="activities" value="shopping">
+                            <label for="shopping"><i class="fas fa-shopping-bag"></i> Shopping</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="food"  class="form-input" name="activities" value="food">
+                            <label for="food"><i class="fas fa-utensils"></i> Food Tours</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="cultural" class="form-input" name="activities" value="cultural">
+                            <label for="cultural"><i class="fas fa-landmark"></i> Cultural</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Details -->
+                <div class="form-group full-width">
+                    <label for="details">Additional Details / Special Requirements</label>
+                    <textarea id="details" class="form-input" name="details" placeholder="Any special requirements, dietary restrictions, or additional information we should know about..."></textarea>
+                </div>
+                
+                <!-- Cost Summary -->
+                <div class="cost-summary" id="costSummary">
+                    <h3>Estimated Cost Breakdown</h3>
+                    <div class="cost-item">
+                        <span>Distance:</span>
+                        <span id="distanceValue">0 km</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Transportation:</span>
+                        <span id="transportCost">₹0</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Accommodation:</span>
+                        <span id="accommodationCost">₹0</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Guide Fee:</span>
+                        <span id="guideCost">₹0</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Activities:</span>
+                        <span id="activitiesCost">₹0</span>
+                    </div>
+                    <div class="cost-item cost-total">
+                        <span>Total Estimated Cost:</span>
+                        <span id="totalCost" class="cost-total">₹0</span>
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit"  id="demoPaymentButton" class="form-button">
+                    <i class="fas fa-paper-plane"></i> Submit & Plan My Trip
+                </button>
+            </form>
+            <div class="form-footer">
+                <p>© 2025 Plan My Trip. All rights reserved. | <a href="#" style="color: var(--primary-color);">Privacy Policy</a> | <a href="#" style="color: var(--primary-color);">Terms of Service</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-content">
+            <button class="close-payment" id="closePayment">&times;</button>
+            <div class="payment-header">
+                <h3>Complete Your Payment</h3>
+                <p>Select your preferred payment method</p>
+            </div>
+            
+            <div class="payment-methods">
+                <div class="payment-method" data-method="creditCardDetails">
+                    <i class="far fa-credit-card"></i>
+                    <div>
+                        <h5>Credit/Debit Card</h5>
+                        <p>Pay using Visa, Mastercard, or other cards</p>
+                    </div>
+                </div>
+                
+                <div class="payment-method" data-method="paypalDetails">
+                    <i class="fab fa-paypal"></i>
+                    <div>
+                        <h5>PayPal</h5>
+                        <p>Pay using your PayPal account</p>
+                    </div>
+                </div>
+                
+                <div class="payment-method" data-method="upiDetails">
+                    <i class="fas fa-mobile-alt"></i>
+                    <div>
+                        <h5>UPI Payment</h5>
+                        <p>Pay using UPI apps like Google Pay, PhonePe</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="creditCardDetails" class="payment-details">
+                <h4>Card Details</h4>
+                <input type="text" placeholder="Card Number" id="cardNumber">
+                <input type="text" placeholder="Cardholder Name" id="cardName">
+                <div class="input-group">
+                    <div>
+                        <input type="text" placeholder="MM/YY" id="cardExpiry">
+                    </div>
+                    <div>
+                        <input type="text" placeholder="CVV" id="cardCvv">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="paypalDetails" class="payment-details">
+                <h4>PayPal Payment</h4>
+                <p>You'll be redirected to PayPal to complete your payment securely.</p>
+            </div>
+            
+            <div id="upiDetails" class="payment-details">
+                <h4>UPI Payment</h4>
+                <input type="text" placeholder="Enter UPI ID (e.g. name@upi)" id="upiId">
+                <div class="qr-code-container">
+                    <p>Or scan this QR code to pay:</p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=UPI_PAYMENT_123456789" alt="UPI QR Code">
+                </div>
+            </div>
+            
+            <div class="payment-actions">
+                <button id="cancelPayment">Cancel</button>
+                <button id="confirmPayment">Confirm Payment</button>
+            </div>
+        </div>
+    </div></div></div>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cute Reviews - PackYourBags</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Color Palette */
+        :root {
+            --primary: #FF7E67;
+            --secondary: #A3E4DB;
+            --accent: #FFD166;
+            --light: #F7F7FF;
+            --dark: #2F2F2F;
+            --text: #5E5E5E;
+        }
+
+        /* Base Styles */
+        .reviews-page {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .reviews-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .reviews-title {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .reviews-subtitle {
+            color: var(--text);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Review Cards Grid */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Cute Review Card */
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-color: var(--secondary);
+        }
+
+        .review-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            background: var(--secondary);
+            border-radius: 0 0 0 12px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.8rem;
+        }
+
+        .location-icon {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .location-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .review-text {
+            color: var(--text);
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .review-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .rating {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* Destination Tags */
+        .destination-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Add Review Button */
+        .add-review-btn {
+            display: block;
+            width: fit-content;
+            margin: 2rem auto 0;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 126, 103, 0.3);
+        }
+
+        .add-review-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 126, 103, 0.4);
+        }
+
+        .add-review-btn i {
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reviews-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="reviews-page">
+        <div class="container">
+            <div class="reviews-header">
+                <h1 class="reviews-title" id="reviews">Traveler Love Notes</h1>
+                <p class="reviews-subtitle">Sweet little reviews from our happy wanderers</p>
+            </div>
+
+            <div class="reviews-grid">
+                <!-- Taj Mahal Review -->
+                <div class="review-card">
+                    <span class="destination-tag">Taj Mahal</span>
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt location-icon"></i>
+                        <span class="location-name">Agra, India</span>
+                    </div>
+                    <p class="review-text">
+                        "The sunrise view took our breath away! Perfect photo spots and such rich history. Will cherish forever 💕"
+                    </p>
+                    <div class="review-meta">
+                        <div class="user">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya" class="user-avatar">
+                            <span class="user-name">Priya K.</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 5.0
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goa Review -->
+                <div class="review-card">
+                    <span class="destination-tag">Goa</span>
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt location-icon"></i>
+                        <span class="location-name">Goa, India</span>
+                    </div>
+                    <p class="review-text">
+                        "Beach huts were adorable! The seafood shacks they recommended were 🤯 Best sunset cocktails ever!"
+                    </p>
+                    <div class="review-meta">
+                        <div class="user">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Alex" class="user-avatar">
+                            <span class="user-name">Alex M.</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.8
+                        </div>
+                    </div>
+                </div>
+
+              
+
+                <!-- Puducherry Review -->
+                <div class="review-card">
+                    <span class="destination-tag">Puducherry</span>
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt location-icon"></i>
+                        <span class="location-name">Puducherry</span>
+                    </div>
+                    <p class="review-text">
+                        "The French Quarter stole my heart 💙 Perfect mix of culture and relaxation. Those bakeries... yum!"
+                    </p>
+                    <div class="review-meta">
+                        <div class="user">
+                            <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="Rahul" class="user-avatar">
+                            <span class="user-name">Rahul P.</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.7
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ooty Review -->
+                <div class="review-card">
+                    <span class="destination-tag">Ooty</span>
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt location-icon"></i>
+                        <span class="location-name">Tamil Nadu</span>
+                    </div>
+                    <p class="review-text">
+                        "Tea gardens for days! The toy train ride was magical. Cool mountain air was exactly what we needed."
+                    </p>
+                    <div class="review-meta">
+                        <div class="user">
+                            <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Meera" class="user-avatar">
+                            <span class="user-name">Meera S.</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.6
+                        </div>
+                    </div>
+                </div>
+
+               
+	<!-- Add this above the button in your HTML -->
+<div id="review-form" style="display: none; background: white; padding: 2rem; border-radius: 12px; margin-top: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+    <h3 style="margin-top: 0; color: var(--primary);">Share Your Experience</h3>
+    <form id="new-review-form">
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Destination</label>
+            <input type="text" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px;" required>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Your Review</label>
+            <textarea style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px; min-height: 100px;" required></textarea>
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Rating</label>
+            <select style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 6px;" required>
+                <option value="">Select rating</option>
+                <option value="5">5 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="2">2 Stars</option>
+                <option value="1">1 Star</option>
+            </select>
+        </div>
+        <button type="submit" style="background: var(--primary); color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 30px; cursor: pointer;">Submit Review</button>
+    </form>
+</div>
+            <button class="add-review-btn">
+                <i class="far fa-plus"></i> Add Your Review
+            </button>
+        </div>
+    </section>
+
+   <script>
+    // Simple animation on hover
+    document.querySelectorAll('.review-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.querySelector('.location-icon').style.transform = 'rotate(15deg)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.querySelector('.location-icon').style.transform = 'rotate(0)';
+        });
+    });
+
+    // Add Review Button Functionality
+    const addReviewBtn = document.querySelector('.add-review-btn');
+    const reviewForm = document.getElementById('review-form');
+    
+    addReviewBtn.addEventListener('click', function() {
+        if (reviewForm.style.display === 'none') {
+            reviewForm.style.display = 'block';
+            addReviewBtn.innerHTML = '<i class="far fa-times"></i> Cancel';
+            reviewForm.scrollIntoView({behavior: 'smooth'});
+        } else {
+            reviewForm.style.display = 'none';
+            addReviewBtn.innerHTML = '<i class="far fa-plus"></i> Add Your Review';
+        }
+    });
+
+    // Form submission handling
+    document.getElementById('new-review-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your review! In a real implementation, this would save to a database.');
+        reviewForm.style.display = 'none';
+        addReviewBtn.innerHTML = '<i class="far fa-plus"></i> Add Your Review';
+    });
+</script>
+</body>
+</html>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    function setupCarousel(carouselId) {
+        const carousel = document.getElementById(carouselId);
+        const cards = carousel.querySelectorAll(".card");
+        const totalCards = cards.length;
+        let index = 1; // Start from the first duplicate
+
+        // Clone the first and last cards
+        const firstClone = cards[0].cloneNode(true);
+        const lastClone = cards[totalCards - 1].cloneNode(true);
+
+        // Add clones to the carousel
+        carousel.appendChild(firstClone);
+        carousel.insertBefore(lastClone, carousel.firstChild);
+
+        // Adjust the starting position
+        const cardWidth = cards[0].offsetWidth + 40; // Adjust for margin
+        carousel.style.transform = `translateX(${-cardWidth}px)`;
+
+        function moveCarousel(direction) {
+            if (direction === 1) {
+                index++;
+            } else {
+                index--;
+            }
+
+            carousel.style.transition = "transform 0.5s ease-in-out";
+            carousel.style.transform = `translateX(${-cardWidth * index}px)`;
+
+            // Handle infinite loop
+            setTimeout(() => {
+                if (index === 0) {
+                    carousel.style.transition = "none";
+                    index = totalCards;
+                    carousel.style.transform = `translateX(${-cardWidth * index}px)`;
+                } else if (index === totalCards + 1) {
+                    carousel.style.transition = "none";
+                    index = 1;
+                    carousel.style.transform = `translateX(${-cardWidth * index}px)`;
+                }
+            }, 500); // Match transition duration
+        }
+
+        // Attach event listeners
+        document.querySelector(`.prev-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => moveCarousel(-1));
+        document.querySelector(`.next-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => moveCarousel(1));
+    }
+
+    // Initialize all carousels
+    setupCarousel("carousel1");
+    setupCarousel("carousel2");
+    setupCarousel("carousel3");
+    setupCarousel("carousel4");
+    setupCarousel("carousel5");
+});
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="ewnqlmaR_Rp0ziA_EJzI5";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+        // Initialize map
+        const map = L.map('map').setView([20, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Variables to store locations and markers
+        let presentMarker = null;
+        let destinationMarker = null;
+        let presentCoords = null;
+        let destinationCoords = null;
+        let distanceKm = 0;
+
+        // Custom marker icons
+        const blueIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        const redIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set minimum date for departure (today)
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('departureDate').min = today;
+            
+            // Set minimum date for return (same as departure)
+            document.getElementById('departureDate').addEventListener('change', function() {
+                document.getElementById('returnDate').min = this.value;
+            });
+            
+            // Update budget value display
+            const budgetSlider = document.getElementById('budget');
+            const budgetValue = document.getElementById('budgetValue');
+            
+            budgetSlider.addEventListener('input', function() {
+                budgetValue.textContent = Number(this.value).toLocaleString('en-IN');
+                calculateEstimatedCost();
+            });
+            
+            // Toggle guide fee field based on guide selection
+            const guideOptions = document.querySelectorAll('input[name="guide"]');
+            const guideFeeGroup = document.getElementById('guideFeeGroup');
+            
+            guideOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    if (this.value === 'with-guide') {
+                        guideFeeGroup.style.display = 'block';
+                    } else {
+                        guideFeeGroup.style.display = 'none';
+                    }
+                    calculateEstimatedCost();
+                });
+            });
+            
+            // Initially hide guide fee if "no guide" is selected
+            if (document.querySelector('input[name="guide"]:checked').value === 'without-guide') {
+                guideFeeGroup.style.display = 'none';
+            }
+            
+            // Calculate estimated cost when any relevant field changes
+            document.getElementById('members').addEventListener('input', calculateEstimatedCost);
+            document.getElementById('guideFee').addEventListener('input', calculateEstimatedCost);
+            document.querySelectorAll('input[name="transportationMode"]').forEach(input => {
+                input.addEventListener('change', calculateEstimatedCost);
+            });
+            document.querySelectorAll('input[name="activities"]').forEach(input => {
+                input.addEventListener('change', calculateEstimatedCost);
+            });
+            
+            // Detect current location
+            document.getElementById('detectLocationBtn').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            setLocation('present', lat, lng);
+                            reverseGeocode(lat, lng, 'present');
+                            map.setView([lat, lng], 13);
+                            document.getElementById('mapContainer').style.display = 'block';
+                        },
+                        function(error) {
+                            alert("Error getting location: " + error.message);
+                        }
+                    );
+                } else {
+                    alert("Geolocation is not supported by your browser");
+                }
+            });
+            
+            // Search for current location
+            document.getElementById('currentLocation').addEventListener('change', function() {
+                if (this.value.trim()) {
+                    geocodeAddress(this.value, 'present');
+                }
+            });
+            
+            // Search for destination
+            document.getElementById('destination').addEventListener('change', function() {
+                if (this.value.trim()) {
+                    geocodeAddress(this.value, 'destination');
+                }
+            });
+            
+            // Form submission
+            document.getElementById('touristForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                // Validate form
+                if (!this.checkValidity()) {
+                    alert('Please fill in all required fields correctly.');
+                    return;
+                }
+                
+                // Ensure both locations are set
+                if (!presentCoords || !destinationCoords) {
+                    alert('Please set both current location and destination');
+                    return;
+                }
+                
+                // Calculate trip duration
+                const departureDate = new Date(document.getElementById('departureDate').value);
+                const returnDate = new Date(document.getElementById('returnDate').value);
+                const tripDuration = Math.ceil((returnDate - departureDate) / (1000 * 60 * 60 * 24));
+                
+                // Collect form data
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    mobile: document.getElementById('mobile').value,
+                    members: parseInt(document.getElementById('members').value),
+                    currentLocation: document.getElementById('currentLocation').value,
+                    destination: document.getElementById('destination').value,
+                    distance: distanceKm,
+                    departureDate: document.getElementById('departureDate').value,
+                    returnDate: document.getElementById('returnDate').value,
+                    duration: tripDuration,
+                    transportationMode: document.querySelector('input[name="transportationMode"]:checked').value,
+                    accommodation: document.querySelector('input[name="accommodation"]:checked').value,
+                    guide: document.querySelector('input[name="guide"]:checked').value,
+                    guideFee: document.getElementById('guideFee').value,
+                    budget: document.getElementById('budget').value,
+                    activities: Array.from(document.querySelectorAll('input[name="activities"]:checked')).map(el => el.value),
+                    details: document.getElementById('details').value || 'No additional details',
+                    estimatedCost: document.getElementById('totalCost').textContent
+                };
+                
+                // Prepare trip details for display
+                const tripDetails = `
+                    Trip Details:
+                    ----------------------------
+                    Name: ${formData.name}
+                    Email: ${formData.email}
+                    Mobile: ${formData.mobile}
+                    
+                    Travel Information:
+                    ----------------------------
+                    From: ${formData.currentLocation}
+                    To: ${formData.destination}
+                    Distance: ${formData.distance.toFixed(2)} km
+                    Departure: ${formData.departureDate}
+                    Return: ${formData.returnDate}
+                    Duration: ${formData.duration} days
+                    Travelers: ${formData.members}
+                    
+                    Travel Preferences:
+                    ----------------------------
+                    Transportation: ${formData.transportationMode}
+                    Accommodation: ${formData.accommodation}
+                    Guide: ${formData.guide === 'with-guide' ? 'Yes (₹' + formData.guideFee + ')' : 'No'}
+                    Activities: ${formData.activities.join(', ') || 'None selected'}
+                    
+                    Budget & Estimated Cost:
+                    ----------------------------
+                    Your Budget: ₹${Number(formData.budget).toLocaleString('en-IN')}
+                    Estimated Cost: ${formData.estimatedCost}
+                    
+                    Additional Details:
+                    ----------------------------
+                    ${formData.details}
+                    
+                    Thank you for using Plan My Trip!
+                    We'll contact you shortly with more details.
+                `;
+                
+                // Show success message
+                alert('Your trip has been submitted successfully!\n\n' + tripDetails);
+            });
+        });
+        
+        // Set location on map and store coordinates
+        function setLocation(type, lat, lng) {
+            if (type === 'present') {
+                if (presentMarker) map.removeLayer(presentMarker);
+                presentMarker = L.marker([lat, lng], {icon: blueIcon}).addTo(map)
+                    .bindPopup("<b>Current Location</b>");
+                presentCoords = { lat, lng };
+            } else {
+                if (destinationMarker) map.removeLayer(destinationMarker);
+                destinationMarker = L.marker([lat, lng], {icon: redIcon}).addTo(map)
+                    .bindPopup("<b>Destination</b>");
+                destinationCoords = { lat, lng };
+            }
+            
+            // Hide instructions and show map
+            document.querySelector('.map-instructions').style.display = 'none';
+            document.getElementById('mapContainer').style.display = 'block';
+            
+            // Calculate distance if both locations are set
+            if (presentCoords && destinationCoords) {
+                calculateDistance();
+            }
+        }
+        
+        // Geocode address using Nominatim
+        function geocodeAddress(address, type) {
+            if (!address) return;
+            
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lon = parseFloat(data[0].lon);
+                        setLocation(type, lat, lon);
+                        
+                        // Update the input field with the found location name
+                        if (data[0].display_name) {
+                            const displayName = data[0].display_name.split(',')[0];
+                            document.getElementById(type === 'present' ? 'currentLocation' : 'destination').value = displayName;
+                        }
+                        
+                        map.setView([lat, lon], 13);
+                    } else {
+                        alert("Location not found");
+                    }
+                })
+                .catch(error => {
+                    console.error("Geocoding error:", error);
+                    alert("Error searching for location");
+                });
+        }
+        
+        // Reverse geocode coordinates to get address
+        function reverseGeocode(lat, lng, type) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById(type === 'present' ? 'currentLocation' : 'destination').value = data.display_name.split(',')[0];
+                    }
+                })
+                .catch(error => {
+                    console.error("Reverse geocoding error:", error);
+                });
+        }
+        
+        // Calculate distance between two points
+       // Calculate distance between two points using Haversine formula
+function calculateDistance() {
+    if (!presentCoords || !destinationCoords) return;
+    
+    const R = 6371; // Earth's radius in km
+    const dLat = toRad(destinationCoords.lat - presentCoords.lat);
+    const dLon = toRad(destinationCoords.lng - presentCoords.lng);
+    const lat1 = toRad(presentCoords.lat);
+    const lat2 = toRad(destinationCoords.lat);
+
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    distanceKm = R * c;
+    
+    document.getElementById('distanceValue').textContent = distanceKm.toFixed(2) + ' km';
+    calculateEstimatedCost();
+}
+
+// Convert degrees to radians
+function toRad(degrees) {
+    return degrees * Math.PI / 180;
+}
+        // Calculate estimated cost based on form inputs
+        function calculateEstimatedCost() {
+            if (!presentCoords || !destinationCoords) return;
+            
+            const members = parseInt(document.getElementById('members').value) || 1;
+            const transportationMode = document.querySelector('input[name="transportationMode"]:checked').value;
+            const hasGuide = document.querySelector('input[name="guide"]:checked').value === 'with-guide';
+            const guideFee = parseInt(document.getElementById('guideFee').value) || 0;
+            const selectedActivities = document.querySelectorAll('input[name="activities"]:checked').length;
+            
+            // Calculate transportation cost based on distance and mode
+            let transportCost = 0;
+            switch(transportationMode) {
+                case 'Bus': 
+                    transportCost = distanceKm * 2 * members; // ₹2 per km per person
+                    break;
+                case 'Car': 
+                    transportCost = distanceKm * 8 * members; // ₹8 per km (fuel + driver)
+                    break;
+                case 'Train': 
+                    transportCost = distanceKm * 1.5 * members; // ₹1.5 per km per person
+                    break;
+                case 'Flight': 
+                    transportCost = distanceKm * 15 * members; // ₹15 per km per person
+                    break;
+                default: 
+                    transportCost = distanceKm * 3 * members;
+            }
+            
+            // Calculate accommodation cost based on duration (simplified)
+            const departureDate = new Date(document.getElementById('departureDate').value);
+            const returnDate = new Date(document.getElementById('returnDate').value);
+            const tripDuration = Math.ceil((returnDate - departureDate) / (1000 * 60 * 60 * 24)) || 1;
+            
+            let accommodationCost = 0;
+            const accommodationType = document.querySelector('input[name="accommodation"]:checked').value;
+            switch(accommodationType) {
+                case 'Hotel': accommodationCost = 2500 * tripDuration * members; break;
+                case 'Resort': accommodationCost = 4000 * tripDuration * members; break;
+                case 'Hostel': accommodationCost = 1000 * tripDuration * members; break;
+                case 'Homestay': accommodationCost = 1500 * tripDuration * members; break;
+                default: accommodationCost = 2000 * tripDuration * members;
+            }
+            
+            // Calculate activities cost
+            const activitiesCost = selectedActivities * 500 * members;
+            
+            // Calculate total cost
+            let totalCost = transportCost + accommodationCost + activitiesCost;
+            if (hasGuide) {
+                totalCost += guideFee;
+            }
+            
+            // Update cost summary
+            document.getElementById('transportCost').textContent = '₹' + Math.round(transportCost).toLocaleString('en-IN');
+            document.getElementById('accommodationCost').textContent = '₹' + Math.round(accommodationCost).toLocaleString('en-IN');
+            document.getElementById('activitiesCost').textContent = '₹' + Math.round(activitiesCost).toLocaleString('en-IN');
+            document.getElementById('guideCost').textContent = hasGuide ? '₹' + guideFee.toLocaleString('en-IN') : '₹0';
+            document.getElementById('totalCost').textContent = '₹' + Math.round(totalCost).toLocaleString('en-IN');
+            
+            // Show cost summary
+            const costSummary = document.getElementById('costSummary');
+            costSummary.style.display = 'block';
+            
+            // Compare with budget and show warning if over
+            const budget = parseInt(document.getElementById('budget').value);
+            if (totalCost > budget) {
+                costSummary.style.backgroundColor = '#fff0f0';
+                document.getElementById('totalCost').style.color = 'var(--danger-color)';
+            } else {
+                costSummary.style.backgroundColor = '#f0f5ff';
+                document.getElementById('totalCost').style.color = 'var(--primary-color)';
+            }
+        }
+                document.addEventListener('DOMContentLoaded', function() {
+            const paymentModal = document.getElementById('paymentModal');
+            const demoButton = document.getElementById('demoPaymentButton');
+            const closeButton = document.getElementById('closePayment');
+            const cancelButton = document.getElementById('cancelPayment');
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            
+            // Show modal
+            demoButton.addEventListener('click', function() {
+                paymentModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+            
+            // Close modal
+            function closeModal() {
+                paymentModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            
+            closeButton.addEventListener('click', closeModal);
+            cancelButton.addEventListener('click', closeModal);
+            
+            // Payment method selection
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    // Remove selected class from all methods
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    
+                    // Add selected class to clicked method
+                    this.classList.add('selected');
+                    
+                    // Hide all payment details
+                    document.querySelectorAll('.payment-details').forEach(detail => {
+                        detail.classList.remove('active');
+                    });
+                    
+                    // Show selected payment details
+                    const methodType = this.getAttribute('data-method');
+                    document.getElementById(methodType).classList.add('active');
+                });
+            });
+            
+            // Confirm payment
+            document.getElementById('confirmPayment').addEventListener('click', function() {
+                const selectedMethod = document.querySelector('.payment-method.selected');
+                if (!selectedMethod) {
+                    alert('Please select a payment method');
+                    return;
+                }
+                
+                const methodType = selectedMethod.getAttribute('data-method');
+                let isValid = true;
+                
+                if (methodType === 'creditCardDetails') {
+                    const cardNumber = document.getElementById('cardNumber').value;
+                    const cardName = document.getElementById('cardName').value;
+                    const cardExpiry = document.getElementById('cardExpiry').value;
+                    const cardCvv = document.getElementById('cardCvv').value;
+                    
+                    if (!cardNumber || !cardName || !cardExpiry || !cardCvv) {
+                        isValid = false;
+                        alert('Please fill in all card details');
+                    }
+                } else if (methodType === 'upiDetails') {
+                    const upiId = document.getElementById('upiId').value;
+                    if (!upiId) {
+                        isValid = false;
+                        alert('Please enter your UPI ID');
+                    }
+                }
+                
+                if (isValid) {
+                    alert('Payment successful! Thank you for your purchase.');
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

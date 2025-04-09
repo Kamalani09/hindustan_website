@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goa – The Pearl of the Orient</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1, h2, h3, h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+        .me {
+            background-color: black;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            padding: 15px 0;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border-radius: 10px;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #007bff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin: 20px 0;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #007bff;
+            text-align: center;
+            animation: popUp 0.5s infinite ease-in-out;
+        }
+
+        @keyframes popUp {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        p {
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .text-section {
+            flex: 3;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .image-section img:hover {
+            transform: scale(1.05);
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 5%;
+        }
+
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: #007bff;
+            border-radius: 50%;
+            padding: 15px;
+            border: 2px solid white;
+            transition: 0.3s;
+        }
+
+        .carousel-control-prev-icon:hover, .carousel-control-next-icon:hover {
+            background-color: #0056b3;
+            border-color: #007bff;
+        }
+
+        #moreContent {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #readMoreBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #readMoreBtn:hover {
+            background: linear-gradient(45deg, #0056b3, #007bff);
+        }
+
+        .icon {
+            color: #007bff;
+            margin-right: 10px;
+        }
+
+        .icon-white {
+            color: white;
+        }
+
+        .footer {
+            background-image: url("/home/rkamalani/Desktop/pack-your-bags/WhatsApp Image 2025-03-16 at 3.38.48 PM (1).jpeg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Carousel -->
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" aria-label="Slide 5"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/alexey-turenkov-bWJiSZjIgTM-unsplash.jpg" class="d-block w-100" alt="Goa Beach">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Goa</h5>
+                    <p class="me">🏖️ Goa has over 100 km of coastline, with more than 35 stunning beaches, making it India's beach capital!</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/ashutosh-saraswat-CXyz3qljaH8-unsplash.jpg" class="d-block w-100" alt="Goa Feni">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Goa</h5>
+                    <p class="me">🍸 Goa is home to Feni, a unique locally brewed liquor made from cashew apples or coconut sap, and it's got a Geographical Indication (GI) tag!</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/raja-sen-FYos6AbcDsY-unsplash.jpg" class="d-block w-100" alt="Goa Turtles">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Goa</h5>
+                    <p class="me">🐢 Goa’s Morjim and Galgibaga beaches are famous for being nesting sites of the endangered Olive Ridley Turtles!</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/kishore-v-taVGqBGCAdo-unsplash.jpg" class="d-block w-100" alt="Goa Carnival">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Goa</h5>
+                    <p class="me">🎉 Goa hosts Asia’s largest and most vibrant carnival, a Portuguese-influenced festival filled with parades, music, and dancing!</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/home/rkamalani/Desktop/pack-your-bags/raja-sen-MzmI2I1GCnU-unsplash.jpg" class="d-block w-100" alt="Goa Culture">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Goa</h5>
+                    <p class="me">🌅 Goa was under Portuguese rule for 450 years before being liberated by India in 1961, giving it a unique blend of European and Indian culture.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <h1>🌴 GOA – THE PEARL OF THE ORIENT</h1>
+    <div class="container">
+        <div class="text-section">
+            <h2>GOA</h2>
+            <p>Goa, India's <b>smallest state</b>, is a tropical paradise on the <b>western coast of India</b>. It is known for its <b>golden beaches, stunning landscapes, and vibrant nightlife</b>. Bordered by the <b>Arabian Sea</b>, Goa boasts <b>over 35 breathtaking beaches</b> with crystal-clear waters. A former <b>Portuguese colony</b>, Goa blends <b>Indian and Western cultures</b>, seen in its architecture and traditions. The <b>Basilica of Bom Jesus, Aguada Fort, and Fontainhas</b> reflect its <b>rich colonial past</b>. Adventure seekers love Goa for its <b>scuba diving, parasailing, and jet skiing</b> experiences. Its <b>lively shacks, nightclubs, and casinos</b> make it India’s <b>ultimate party destination</b>. <b>Goan cuisine</b> is famous for its <b>spicy seafood, Vindaloo, and Bebinca dessert</b>. Festivals like <b>Goa Carnival and Sunburn Festival</b> bring tourists from all over the world. The state has a <b>tropical climate</b>, best visited between <b>November and February</b>. Natural wonders like <b>Dudhsagar Waterfalls and wildlife sanctuaries</b> add to its charm. Goa is well-connected with <b>two airports (Mopa & Dabolim), railways, and roadways</b>. With its <b>welcoming locals, scenic beauty, and cultural richness</b>, Goa is an unforgettable destination. Whether you seek <b>relaxation, adventure, or history</b>, Goa has something for everyone! 😊🌊</p>
+            <button id="readMoreBtn">Read More</button>
+            <div id="moreContent">
+                <video width="800" height="360" autoplay loop muted>
+                    <source src="goa.mp4" type="video/mp4">
+                </video>
+                <p>Tourism is generally focused on the coastal areas of Goa, with lower tourist activity inland. In 2010, there were more than 2 million tourists reported to have visited Goa, about 1.2 million of whom were from abroad. As of 2013, Goa was a destination of choice for Indian and foreign tourists, particularly Britons and Russians, with limited means who wanted to vacation outside of their countries. The state was hopeful that changes could be made which would attract a more upscale demographic.</p>
+                <h2>🌊 Stunning Beaches of Goa</h2>
+                <p>Goa is home to over 35 stunning beaches, each offering a unique experience, from vibrant nightlife to serene escapes. Baga Beach is the ultimate party hub, while Calangute Beach is perfect for watersports. Anjuna Beach attracts hippies and flea market lovers, whereas Palolem Beach in South Goa offers tranquil beauty and dolphin-watching. Vagator Beach is known for its red cliffs and Chapora Fort, while Morjim Beach is a nesting site for Olive Ridley turtles. Colva Beach, one of Goa’s oldest, is famous for its soft white sands and seafood shacks, whereas Arambol Beach has a bohemian charm with live music and paragliding. Whether you're looking for adventure, relaxation, or vibrant beach parties, Goa’s coastline has something for everyone! 🌊🏖️🔥</p>
+                <h2>🚀 Adventure Activities and Watersports</h2>
+                <p>Goa is a paradise for adventure seekers, offering an exciting range of watersports and thrilling activities. You can experience the adrenaline rush of parasailing over the Arabian Sea at Baga and Calangute Beaches or go jet skiing and banana boat riding for a splash of excitement. Scuba diving and snorkeling at Grande Island reveal stunning coral reefs and marine life, while kayaking through mangroves in the backwaters offers a peaceful escape. For those seeking extreme adventure, flyboarding in Chapora River and white-water rafting in the Mhadei River provide unforgettable experiences. Whether it’s surfing, windsurfing, or deep-sea fishing, Goa’s adventure scene has something for every thrill-seeker! 🚀🌊🔥</p>
+                <center><img src="/home/rkamalani/Desktop/pack-your-bags/jan-dekker-GgEXvl42Jfw-unsplash.jpg" width="800" height="350" alt="Goa Adventure"></center>
+            </div>
+        </div>
+        <div class="image-section">
+            <h3>Find Location <i class="fas fa-map-marker-alt icon"></i></h3>
+           <a href="https://www.google.com/maps/place/goa"> <img class="me" width="350" height="350" src="/home/rkamalani/Desktop/pack-your-bags/map.png" alt="Goa Map" ></a>
+            <img src="/home/rkamalani/Desktop/pack-your-bags/alexey-turenkov-bWJiSZjIgTM-unsplash.jpg" alt="Goa Image 1">
+            <img src="/home/rkamalani/Desktop/pack-your-bags/kishore-v-taVGqBGCAdo-unsplash.jpg" alt="Goa Image 2">
+            <img src="/home/rkamalani/Desktop/pack-your-bags/ashutosh-saraswat-CXyz3qljaH8-unsplash.jpg" alt="Goa Image 3">
+            <img src="/home/rkamalani/Desktop/pack-your-bags/raja-sen-FYos6AbcDsY-unsplash.jpg" alt="Goa Image 4">
+            <img src="/home/rkamalani/Desktop/pack-your-bags/raja-sen-MzmI2I1GCnU-unsplash.jpg" alt="Goa Image 5">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <center>
+            <table width="80%">
+                <tr align="left">
+                    <td>
+                        <h4 style="color:white">Pack Your Bags</h4>
+                        <br>
+                        Follow Us<br>
+                        <img src="/home/rkamalani/Desktop/pack-your-bags/facebook.png">
+                        <a href="https://www.instagram.com/pack.yourbags1/profilecard/?igsh=MTdkNzBvMnNkM29rdA=="> <img src="/home/rkamalani/Desktop/pack-your-bags/instagram.png"></a>
+                        <img src="/home/rkamalani/Desktop/pack-your-bags/youtube.png">
+                    </td>
+                    <td>
+                        <h4>Quick Links</h4>
+                        <br>
+                        historical
+                        <br>
+                        spiritual
+                        <br>
+                        waterfalls
+                        <br>
+                        Treking
+                        <br>
+                        Beaches
+                        <br>
+                    </td>
+                    <td align="center">
+                        <h4>Scan to Chat</h4>
+                        <img src="/home/rkamalani/Desktop/pack-your-bags/WhatsApp Image 2025-03-16 at 3.28.30 PM.jpeg" width="100" height="100">
+                    </td>
+                </tr>
+            </table>
+        </center>
+        <hr>
+        &copy; 2024 Gulmarg Serenity Escape | <a href="#">Contact Us</a> | <a href="#">Privacy Policy</a>
+        <br>
+        <br>
+        <center>Travel with us</center>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Read More button functionality
+        document.getElementById("readMoreBtn").addEventListener("click", function() {
+            var content = document.getElementById("moreContent");
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+                this.textContent = "Show Less";
+            } else {
+                content.style.display = "none";
+                this.textContent = "Read More";
+            }
+        });
+    </script>
+</body>
+</html>
